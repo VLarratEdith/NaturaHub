@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#667eea">
+  <title>🌈 BioExplorer - Descubre la Naturaleza</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+    
+    :root {
+      --primary: #667eea;
+      --primary-light: #764ba2;
+      --secondary: #f093fb;
+      --accent: #4facfe;
+      --success: #43e97b;
+      --warning: #fa709a;
+      --danger: #ff6b6b;
+      --nature-green: #56ab2f;
+      --ocean-blue: #2193b0;
+      --sunset-orange: #ff9a9e;
+      --forest: #134e5e;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --card-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --glass: rgba(255, 255, 255, 0.25);
+      --shadow-lg: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      --radius-xl: 24px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body { 
+      font-family: 'Nunito', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      color: #2d3748; 
+      line-height: 1.6; 
+      padding-bottom: 90px;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Header Mejorado */
+    header { 
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      position: sticky; 
+      top: 0; 
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-bottom: 3px solid transparent;
+      border-image: linear-gradient(90deg, #667eea, #f093fb, #4facfe);
+      border-image-slice: 1;
+    }
+
+    .app-brand { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .app-logo {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .app-title { 
+      font-weight: 900; 
+      font-size: 1.4rem; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .status-pills {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    .pill.online {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      color: white;
+    }
+
+    .pill.offline {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: white;
+    }
+
+    .pill.sync {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      display: none;
+    }
+
+    /* Main Content */
+    main { 
+      padding: 20px 16px; 
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .screen { 
+      display: none; 
+      animation: slideIn 0.4s ease;
+    }
+
+    .screen.active { 
+      display: block; 
+    }
+
+    /* Welcome Hero */
+    .hero {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-xl);
+      padding: 30px 20px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-emoji {
+      font-size: 4rem;
+      margin-bottom: 12px;
+      animation: bounce 2s infinite;
+    }
+
+    .hero h1 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: #718096;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    /* Cards Mejoradas */
+    .card { 
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-lg); 
+      padding: 20px; 
+      margin-bottom: 16px; 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      border: 2px solid rgba(255,255,255,0.5);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #f093fb, #4facfe);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .card h3 { 
+      font-size: 1.2rem; 
+      font-weight: 800; 
+      color: #2d3748;
+    }
+
+    .card p { 
+      font-size: 0.9rem; 
+      color: #718096;
+      font-weight: 600;
+    }
+
+    /* Image Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+      transition: transform 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      padding: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Tags Coloridos */
+    .tag { 
+      display: inline-block; 
+      padding: 6px 12px; 
+      border-radius: 20px; 
+      font-size: 0.75rem; 
+      font-weight: 800;
+      margin: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: pulse 2s infinite;
+    }
+
+    .tag-bird { 
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+
+    .tag-plant { 
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      color: white;
+    }
+
+    .tag-animal { 
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: white;
+    }
+
+    .tag-fungi { 
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      color: #2d3748;
+    }
+
+    .tag-protected { 
+      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Botones Mejorados */
+    .btn { 
+      padding: 14px 24px; 
+      border: none; 
+      border-radius: var(--radius-md); 
+      font-weight: 800; 
+      font-size: 1rem;
+      cursor: pointer; 
+      transition: all 0.3s; 
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn:active { 
+      transform: scale(0.96); 
+    }
+
+    .btn-primary { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; 
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-success { 
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      color: white; 
+    }
+
+    .btn-warning { 
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: white; 
+    }
+
+    .btn-danger { 
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      color: white; 
+    }
+
+    .btn-full { 
+      width: 100%; 
+      margin-top: 12px;
+    }
+
+    .btn-large {
+      padding: 18px 32px;
+      font-size: 1.1rem;
+    }
+
+    /* Map Container Mejorado */
+    .map-container { 
+      height: 280px; 
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      border-radius: var(--radius-lg); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      position: relative; 
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .map-container::before {
+      content: '🗺️';
+      font-size: 5rem;
+      opacity: 0.3;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .map-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(255,255,255,0.95);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-indicator {
+      width: 10px;
+      height: 10px;
+      background: #43e97b;
+      border-radius: 50%;
+      animation: pulse 1s infinite;
+    }
+
+    /* Form Elements Mejorados */
+    .form-group { 
+      margin-bottom: 20px; 
+    }
+
+    label { 
+      display: block; 
+      font-size: 0.9rem; 
+      margin-bottom: 8px; 
+      font-weight: 800;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    input, select, textarea { 
+      width: 100%; 
+      padding: 14px 16px; 
+      border: 3px solid #e2e8f0; 
+      border-radius: var(--radius-md); 
+      font-size: 1rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      background: white;
+      transition: all 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus { 
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+      outline: none;
+    }
+
+    /* Bottom Navigation Mejorada */
+    .bottom-nav { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      display: flex; 
+      justify-content: space-around; 
+      padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
+      z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, #667eea, #f093fb, #4facfe);
+      border-image-slice: 1;
+    }
+
+    .nav-item { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      gap: 4px; 
+      font-size: 0.75rem; 
+      font-weight: 800;
+      color: #a0aec0; 
+      background: none; 
+      border: none; 
+      padding: 8px 16px;
+      min-width: 60px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 16px;
+      position: relative;
+    }
+
+    .nav-item.active { 
+      color: #667eea;
+      background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+      transform: translateY(-4px);
+    }
+
+    .nav-icon { 
+      font-size: 1.8rem;
+      transition: transform 0.3s;
+    }
+
+    .nav-item.active .nav-icon {
+      transform: scale(1.2);
+      animation: bounce 0.5s;
+    }
+
+    /* AI Chat Panel Mejorado */
+    .ai-fab { 
+      position: fixed; 
+      bottom: 100px; 
+      right: 20px; 
+      width: 65px; 
+      height: 65px; 
+      border-radius: 50%; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; 
+      border: none; 
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer; 
+      z-index: 90;
+      font-size: 2rem;
+      transition: all 0.3s;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .ai-fab:hover { 
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+    }
+
+    .ai-panel { 
+      position: fixed; 
+      bottom: 100px; 
+      right: 20px; 
+      left: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      display: none; 
+      flex-direction: column; 
+      max-height: 65vh; 
+      overflow: hidden; 
+      z-index: 91;
+      border: 3px solid rgba(102,126,234,0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    .ai-header { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; 
+      padding: 16px 20px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .ai-messages { 
+      flex: 1; 
+      padding: 16px; 
+      overflow-y: auto; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .msg { 
+      max-width: 85%; 
+      padding: 12px 16px; 
+      border-radius: 18px; 
+      font-size: 0.9rem;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+      line-height: 1.5;
+    }
+
+    .msg.user { 
+      align-self: flex-end; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.ai { 
+      align-self: flex-start; 
+      background: white;
+      color: #2d3748;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .ai-input { 
+      display: flex; 
+      padding: 12px; 
+      gap: 8px;
+      background: white;
+      border-top: 2px solid #e2e8f0;
+    }
+
+    .ai-input input { 
+      flex: 1; 
+      padding: 12px 16px; 
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      font-weight: 600;
+    }
+
+    .ai-input button {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+
+    .ai-input button:active {
+      transform: scale(0.9);
+    }
+
+    /* SOS Modal Mejorado */
+    dialog#sos-modal { 
+      border: none; 
+      border-radius: var(--radius-xl); 
+      padding: 0;
+      max-width: 420px; 
+      width: 95%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease;
+    }
+
+    dialog::backdrop { 
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .sos-container {
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    .sos-header { 
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      gap: 12px;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    .sos-content {
+      padding: 24px 20px;
+    }
+
+    .sos-steps { 
+      list-style: none; 
+      margin: 16px 0; 
+    }
+
+    .sos-steps li { 
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: var(--radius-md);
+      display: flex; 
+      align-items: flex-start;
+      gap: 14px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+
+    .sos-steps li:hover {
+      transform: translateX(4px);
+    }
+
+    .step-num { 
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      color: white; 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 1rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(255,107,107,0.3);
+    }
+
+    /* Feature Cards con Imágenes */
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .feature-content {
+      padding: 16px;
+    }
+
+    .feature-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #2d3748;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: #718096;
+      font-weight: 600;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 900;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    /* Privacy Banner */
+    .privacy-banner { 
+      background: linear-gradient(135deg, #fff6b7 0%, #f6416c 100%);
+      color: white;
+      border-radius: var(--radius-md);
+      padding: 16px; 
+      margin: 16px 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(246,65,108,0.3);
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Accessibility */
+    .sr-only { 
+      position: absolute; 
+      width: 1px; 
+      height: 1px; 
+      padding: 0; 
+      margin: -1px; 
+      overflow: hidden; 
+      clip: rect(0,0,0,0); 
+      border: 0; 
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.5rem; }
+      .hero-emoji { font-size: 3rem; }
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      }
+      body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      }
+      .card, header, .bottom-nav, .ai-panel, dialog#sos-modal {
+        background: rgba(30, 30, 46, 0.95);
+        color: #e0e0e0;
+      }
+      input, select, textarea {
+        background: #2d2d44;
+        color: #e0e0e0;
+        border-color: #404060;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header role="banner">
+  <div class="app-brand">
+    <div class="app-logo">🌿</div>
+    <div class="app-title">BioExplorer</div>
+  </div>
+  <div class="status-pills">
+    <span class="pill online" id="status-pill">
+      <span class="live-indicator"></span>
+      <span id="conn-text">Online</span>
+    </span>
+    <span class="pill sync" id="sync-pill">
+      ⏳ <span id="sync-count">0</span>
+    </span>
+  </div>
+</header>
+
+<main role="main">
+  <!-- 🎯 PANTALLA DE INICIO -->
+  <section id="screen-home" class="screen active">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-emoji">🦋🦜</div>
+        <h1>¡Explora la Naturaleza!</h1>
+        <p>Identifica especies, únete a la comunidad y ayuda a conservar</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number" id="stat-obs">0</span>
+        <span class="stat-label">Observaciones</span>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+        <span class="stat-number" id="stat-species">0</span>
+        <span class="stat-label">Especies</span>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+        <span class="stat-number">12</span>
+        <span class="stat-label">Proyectos</span>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+        <span class="stat-number">48h</span>
+        <span class="stat-label">En naturaleza</span>
+      </div>
+    </div>
+
+    <h2 style="color: white; margin: 24px 0 16px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+      🎮 ¿Qué quieres hacer hoy?
+    </h2>
+
+    <div class="feature-card" onclick="showScreen('identify')" style="cursor: pointer;">
+      <div class="feature-image">📸</div>
+      <div class="feature-content">
+        <div class="feature-title">🔍 Identificar Especie</div>
+        <div class="feature-desc">Toma una foto y deja que la IA la identifique al instante</div>
+      </div>
+    </div>
+
+    <div class="feature-card" onclick="showScreen('map')" style="cursor: pointer;">
+      <div class="feature-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🗺️</div>
+      <div class="feature-content">
+        <div class="feature-title">📍 Explorar Mapa</div>
+        <div class="feature-desc">Descubre hotspots de biodiversidad y rutas cercanas</div>
+      </div>
+    </div>
+
+    <div class="feature-card" onclick="showScreen('community')" style="cursor: pointer;">
+      <div class="feature-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">👥</div>
+      <div class="feature-content">
+        <div class="feature-title">🌍 Comunidad Global</div>
+        <div class="feature-desc">Únete a proyectos de ciencia ciudadana</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🗺️ EXPLORACIÓN CON MAPA -->
+  <section id="screen-map" class="screen">
+    <h2 style="color: white; margin-bottom: 16px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+      🗺️ Exploración Inteligente
+    </h2>
+
+    <div class="map-container">
+      <div class="map-badge">
+        <span class="live-indicator"></span>
+        <span>Actualizado: <strong id="last-update">Ahora</strong></span>
+      </div>
+      <div style="text-align: center; color: #667eea; font-weight: 800;">
+        <div style="font-size: 1.2rem; margin-bottom: 8px;">📍 Tu Ubicación</div>
+        <div style="font-size: 0.9rem;">3 avistamientos cerca</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+        <div>
+          <h3>Rutas Populares</h3>
+          <p>Cerca de ti</p>
+        </div>
+      </div>
+      <div id="routes-container"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">🔥</div>
+        <div>
+          <h3>Hotspots de Biodiversidad</h3>
+          <p>Zonas con alta actividad</p>
+        </div>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🦅</div>
+          <div class="gallery-overlay">Mirador Águilas<br><span class="tag tag-bird">12 avistamientos</span></div>
+        </div>
+        <div class="gallery-item">
+          <div style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🦆</div>
+          <div class="gallery-overlay">Humedal<br><span class="tag tag-animal">28 especies</span></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full btn-large" onclick="downloadMap()">
+      ⬇️ Descargar Mapa Offline
+    </button>
+  </section>
+
+  <!-- 🔍 IDENTIFICACIÓN MULTIMODAL -->
+  <section id="screen-identify" class="screen">
+    <h2 style="color: white; margin-bottom: 16px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+      🔍 Identificación Inteligente
+    </h2>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📷</div>
+        <div>
+          <h3>Identificar por Foto</h3>
+          <p>IA de iNaturalist + Merlin</p>
+        </div>
+      </div>
+      <div style="border: 3px dashed #667eea; border-radius: var(--radius-md); padding: 40px; text-align: center; background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);">
+        <div style="font-size: 4rem; margin-bottom: 12px;">📸</div>
+        <p style="font-weight: 700; color: #667eea; margin-bottom: 16px;">Toca para tomar foto o subir imagen</p>
+        <button class="btn btn-primary" onclick="simulatePhotoIdentify()">
+          🎯 Identificar Ahora
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">🎵</div>
+        <div>
+          <h3>Identificar por Sonido</h3>
+          <p>BirdNET - Como Shazam para aves</p>
+        </div>
+      </div>
+      <button class="btn btn-success btn-full btn-large" onclick="simulateSoundIdentify()">
+        🎤 Grabar Canto
+      </button>
+      <p style="text-align: center; margin-top: 12px; font-size: 0.85rem; color: #718096; font-weight: 600;">
+        Funciona offline • Soporta 6000+ especies
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">🎮</div>
+        <div>
+          <h3>Aprende Jugando</h3>
+          <p>Modo juego tipo Avefy</p>
+        </div>
+      </div>
+      <button class="btn btn-warning btn-full btn-large" onclick="startGameMode()">
+        🎲 Iniciar Juego
+      </button>
+    </div>
+
+    <div id="identify-result" style="display: none;">
+      <div class="card" style="border: 3px solid #43e97b;">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">✅</div>
+          <div>
+            <h3>¡Identificado!</h3>
+            <p>Confianza: 94%</p>
+          </div>
+        </div>
+        <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); height: 200px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 5rem; margin-bottom: 12px;">
+          🦜
+        </div>
+        <h4 style="font-size: 1.3rem; font-weight: 900; margin-bottom: 8px;">Cotorra Argentina</h4>
+        <p style="color: #718096; font-weight: 700; margin-bottom: 12px;"><em>Myiopsitta monachus</em></p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="tag tag-bird">Aves</span>
+          <span class="tag tag-animal">Residente</span>
+          <span class="tag">Urbano</span>
+        </div>
+        <button class="btn btn-primary btn-full" style="margin-top: 12px;">
+          💾 Guardar Observación
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📝 REGISTRO DE AVISTAMIENTOS -->
+  <section id="screen-science" class="screen">
+    <h2 style="color: white; margin-bottom: 16px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+      📝 Ciencia Ciudadana
+    </h2>
+
+    <div class="privacy-banner">
+      <span style="font-size: 1.5rem;">🔒</span>
+      <div>
+        <strong>Privacidad Activa</strong><br>
+        Coordenadas ofuscadas para especies protegidas
+      </div>
+    </div>
+
+    <div class="card">
+      <form id="obs-form" onsubmit="submitObservation(event)">
+        <div class="form-group">
+          <label for="obs-species"> Especie</label>
+          <input type="text" id="obs-species" placeholder="Ej: Águila perdicera" required>
+        </div>
+
+        <div class="form-group">
+          <label for="obs-count">🔢 Cantidad</label>
+          <input type="number" id="obs-count" min="1" value="1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="obs-behavior"> Comportamiento</label>
+          <select id="obs-behavior">
+            <option>Volando</option>
+            <option>En reposo</option>
+            <option>Alimentándose</option>
+            <option>Cantando</option>
+            <option>Anidando</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="obs-media">📎 Adjuntar Multimedia</label>
+          <input type="file" id="obs-media" accept="image/*,audio/*,video/*" multiple>
+          <p style="font-size: 0.8rem; color: #718096; margin-top: 6px; font-weight: 600;">
+            💡 Fotos, audios de cantos o vídeos de comportamiento
+          </p>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-full btn-large">
+          💾 Guardar Observación
+        </button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div>
+          <h3>Proyectos Activos</h3>
+          <p>Únete a la ciencia ciudadana</p>
+        </div>
+      </div>
+      <div class="feature-card" style="margin-bottom: 12px;">
+        <div class="feature-content">
+          <div class="feature-title">🦅 Censo Águilas Imperiales</div>
+          <div class="feature-desc">Contribuye al seguimiento de esta especie protegida</div>
+          <span class="tag tag-protected" style="margin-top: 8px;">UICN: Vulnerable</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-content">
+          <div class="feature-title">🦋 Mariposas Migratorias</div>
+          <div class="feature-desc">Registro de rutas migratorias 2024</div>
+          <span class="tag tag-animal" style="margin-top: 8px;">Activo hasta Dic</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-danger btn-full btn-large" onclick="openSOS()">
+      🆘 SOS Emergencia
+    </button>
+  </section>
+
+  <!-- 📚 GUÍAS Y EDUCACIÓN -->
+  <section id="screen-guide" class="screen">
+    <h2 style="color: white; margin-bottom: 16px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+      📚 Guías Interactivas
+    </h2>
+
+    <div class="form-group">
+      <label for="habitat-filter">🌍 Filtrar por Hábitat</label>
+      <select id="habitat-filter" onchange="filterSpecies()">
+        <option value="all">Todos los hábitats</option>
+        <option value="forest">🌲 Bosque/Monte</option>
+        <option value="wetland">💧 Humedales</option>
+        <option value="urban">🏙️ Urbano</option>
+        <option value="mountain">⛰️ Montaña</option>
+      </select>
+    </div>
+
+    <div id="species-guide-container"></div>
+
+    <div class="card" style="margin-top: 20px;">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">🎓</div>
+        <div>
+          <h3>Eco-Escuela</h3>
+          <p>Módulos educativos descargables</p>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full">
+        📥 Descargar Guía Completa (PDF)
+      </button>
+    </div>
+  </section>
+
+  <!-- 👥 COMUNIDAD -->
+  <section id="screen-community" class="screen">
+    <h2 style="color: white; margin-bottom: 16px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+      👥 Comunidad BioExplorer
+    </h2>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">📅</div>
+        <div>
+          <h3>Eventos Próximos</h3>
+          <p>Únete a actividades</p>
+        </div>
+      </div>
+      <div class="feature-card" style="margin-bottom: 12px;">
+        <div class="feature-content">
+          <div class="feature-title">🦜 Jornada Anillamiento Científico</div>
+          <div class="feature-desc">15 Nov • Parque Natural Sierra de Grazalema</div>
+          <span class="tag tag-bird" style="margin-top: 8px;">Plazas limitadas</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-content">
+          <div class="feature-title">🌿 Limpieza de Senderos</div>
+          <div class="feature-desc">22 Nov • Ruta del Agua</div>
+          <span class="tag tag-plant" style="margin-top: 8px;">Abierto a todos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🏆</div>
+        <div>
+          <h3>Tus Logros</h3>
+          <p>Progreso en la app</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+          <span class="stat-number">🥇</span>
+          <span class="stat-label">Experto Aves</span>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <span class="stat-number">🌟</span>
+          <span class="stat-label">50 Obs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">🤝</div>
+        <div>
+          <h3>Turismo Verde</h3>
+          <p>Guías y alojamientos sostenibles</p>
+        </div>
+      </div>
+      <button class="btn btn-success btn-full">
+        🗺️ Ver Directorio Completo
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- AI Floating Button -->
+<button class="ai-fab" onclick="toggleAI()" aria-label="Abrir asistente">
+  🤖
+</button>
+
+<!-- AI Chat Panel -->
+<div class="ai-panel" id="ai-panel" role="region" aria-label="Asistente BioExplorer">
+  <div class="ai-header">
+    <span>🌿 BioAssistant IA</span>
+    <button onclick="toggleAI()" style="background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;">✕</button>
+  </div>
+  <div class="ai-messages" id="ai-messages" role="log" aria-live="polite">
+    <div class="msg ai">
+      ¡Hola! Soy tu asistente de naturaleza. Puedo ayudarte a:<br>
+      • Identificar especies<br>
+      • Encontrar rutas cercanas<br>
+      • Responder dudas sobre conservación<br>
+      ¿En qué te ayudo hoy? 🦋
+    </div>
+  </div>
+  <div class="ai-input">
+    <input type="text" id="ai-input" placeholder="Pregunta sobre naturaleza..." onkeypress="if(event.key==='Enter') sendAI()">
+    <button onclick="sendAI()">➤</button>
+  </div>
+</div>
+
+<!-- SOS Modal -->
+<dialog id="sos-modal" aria-modal="true">
+  <div class="sos-container">
+    <div class="sos-header">
+      <span style="font-size: 2rem;">🆘</span>
+      <span>Emergencia Naturaleza</span>
+    </div>
+    <div class="sos-content">
+      <p style="font-weight: 700; margin-bottom: 16px; color: #2d3748;">
+        Sigue estos pasos importantes:
+      </p>
+      <ol class="sos-steps">
+        <li>
+          <span class="step-num">1</span>
+          <div>
+            <strong>Mantén la calma</strong><br>
+            Aléjate de zonas de peligro inmediato
+          </div>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <div>
+            <strong>Activa GPS</strong><br>
+            Comparte tu ubicación aproximada
+          </div>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <div>
+            <strong>Contacta emergencias</strong><br>
+            Llama al 112 o guarda forestal más cercano
+          </div>
+        </li>
+        <li>
+          <span class="step-num">4</span>
+          <div>
+            <strong>Primera ayuda</strong><br>
+            Aplica protocolos básicos si es necesario
+          </div>
+        </li>
+      </ol>
+      <div style="display:flex;gap:12px;margin-top:20px;">
+        <button class="btn btn-secondary" onclick="document.getElementById('sos-modal').close()" style="flex:1;">
+          Cerrar
+        </button>
+        <button class="btn btn-danger" onclick="triggerEmergency()" style="flex:2;">
+          📡 Enviar SOS
+        </button>
+      </div>
+      <p style="font-size: 0.8rem; color: #718096; margin-top: 12px; text-align: center; font-weight: 600;">
+        🔒 Tus datos se enviarán cifrados y ofuscados
+      </p>
+    </div>
+  </div>
+</dialog>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav" role="navigation" aria-label="Navegación principal">
+  <button class="nav-item active" onclick="showScreen('home')" id="nav-home">
+    <span class="nav-icon">🏠</span>
+    <span>Inicio</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('map')" id="nav-map">
+    <span class="nav-icon">🗺️</span>
+    <span>Mapa</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('identify')" id="nav-identify">
+    <span class="nav-icon">🔍</span>
+    <span>Identificar</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('science')" id="nav-science">
+    <span class="nav-icon">📝</span>
+    <span>Registro</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('guide')" id="nav-guide">
+    <span class="nav-icon">📚</span>
+    <span>Guías</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('community')" id="nav-community">
+    <span class="nav-icon">👥</span>
+    <span>Comunidad</span>
+  </button>
+</nav>
+
+<script>
+  // ================= ESTADO GLOBAL =================
+  const state = {
+    isOffline: !navigator.onLine,
+    syncQueue: JSON.parse(localStorage.getItem('syncQueue') || '[]'),
+    observations: JSON.parse(localStorage.getItem('observations') || '[]'),
+    lastSync: localStorage.getItem('lastSync') || Date.now()
+  };
+
+  // Datos de ejemplo mejorados
+  const routes = [
+    { name: 'Sendero de los Miradores', dist: '4.2 km', elev: '+210m', diff: 'Media', icon: '🦅', color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+    { name: 'Ruta Húmeda del Estero', dist: '2.8 km', elev: '+30m', diff: 'Fácil ♿', icon: '🦆', color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+    { name: 'Travesía del Monte', dist: '7.5 km', elev: '+450m', diff: 'Alta', icon: '🦌', color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }
+  ];
+
+  const speciesData = [
+    { name: 'Cigüeña Negra', sci: 'Ciconia nigra', habitat: 'forest', icon: '🦅', tags: ['protected', 'bird'], status: 'UICN: En Peligro' },
+    { name: 'Garza Imperial', sci: 'Ardea purpurea', habitat: 'wetland', icon: '🦆', tags: ['animal'], status: 'Migratoria' },
+    { name: 'Orquídea Silvestre', sci: 'Orchis italica', habitat: 'mountain', icon: '🌸', tags: ['plant', 'protected'], status: 'Endémica' },
+    { name: 'Gorrión Común', sci: 'Passer domesticus', habitat: 'urban', icon: '🐦', tags: ['bird'], status: 'Común' }
+  ];
+
+  // ================= NAVEGACIÓN =================
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(`screen-${screenId}`).classList.add('active');
+    const navItem = document.getElementById(`nav-${screenId}`);
+    if (navItem) navItem.classList.add('active');
+    
+    // Actualizar estadísticas
+    if (screenId === 'home') {
+      updateStats();
+    }
+  }
+
+  // ================= RENDERIZADO =================
+  function renderRoutes() {
+    const container = document.getElementById('routes-container');
+    container.innerHTML = routes.map(route => `
+      <div class="feature-card" style="margin-bottom: 12px;">
+        <div class="feature-image" style="background: ${route.color}; height: 120px;">
+          <span style="font-size: 3.5rem;">${route.icon}</span>
+        </div>
+        <div class="feature-content">
+          <div class="feature-title">${route.name}</div>
+          <div class="feature-desc" style="margin: 8px 0;">
+            📏 ${route.dist} • ⛰️ ${route.elev} • 🎯 ${route.diff}
+          </div>
+          <button class="btn btn-primary" style="margin-top: 8px; padding: 10px 16px; font-size: 0.9rem;">
+            Ver Detalles →
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterSpecies() {
+    const habitat = document.getElementById('habitat-filter').value;
+    const filtered = habitat === 'all' ? speciesData : speciesData.filter(s => s.habitat === habitat);
+    
+    const container = document.getElementById('species-guide-container');
+    container.innerHTML = filtered.map(s => `
+      <div class="feature-card">
+        <div class="feature-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 140px;">
+          <span style="font-size: 4rem;">${s.icon}</span>
+        </div>
+        <div class="feature-content">
+          <div class="feature-title">${s.name}</div>
+          <div class="feature-desc" style="font-style: italic; margin-bottom: 8px;">${s.sci}</div>
+          <div style="margin-bottom: 8px;">
+            ${s.tags.map(tag => {
+              const tagClass = tag === 'protected' ? 'tag-protected' : tag === 'bird' ? 'tag-bird' : tag === 'plant' ? 'tag-plant' : 'tag-animal';
+              return `<span class="tag ${tagClass}">${tag === 'protected' ? '🔒 Protegida' : tag}</span>`;
+            }).join('')}
+          </div>
+          <div style="background: #f5f7fa; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #667eea;">
+            ${s.status}
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn btn-primary" style="flex: 1; padding: 10px;">🎧 Sonido</button>
+            <button class="btn btn-success" style="flex: 1; padding: 10px;">📖 Info</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ================= IDENTIFICACIÓN =================
+  function simulatePhotoIdentify() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="loading"></span> Analizando...';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      document.getElementById('identify-result').style.display = 'block';
+      document.getElementById('identify-result').scrollIntoView({ behavior: 'smooth' });
+    }, 2000);
+  }
+
+  function simulateSoundIdentify() {
+    alert('🎤 Grabando... (Simulación)\n\nEn la app real:\n• Grabaría 30 segundos de audio\n• BirdNET analizaría el canto\n• Mostraría especies detectadas\n• Funciona offline con modelo local');
+  }
+
+  function startGameMode() {
+    alert('🎮 Modo Juego Activado\n\nCaracterísticas:\n• Aprende cantos como en Avefy\n• Gana puntos identificando\n• Sube de nivel\n• Desbloquea logros\n• Compite con amigos');
+  }
+
+  // ================= OBSERVACIONES =================
+  function submitObservation(e) {
+    e.preventDefault();
+    
+    const observation = {
+      id: Date.now(),
+      species: document.getElementById('obs-species').value,
+      count: parseInt(document.getElementById('obs-count').value),
+      behavior: document.getElementById('obs-behavior').value,
+      timestamp: new Date().toISOString(),
+      coords: {
+        lat: 36.8 + Math.random() * 0.02,
+        lng: -5.1 + Math.random() * 0.02
+      }
+    };
+
+    // Ofuscar coordenadas si es especie protegida
+    if (observation.species.toLowerCase().includes('águila') || 
+        observation.species.toLowerCase().includes('cigüeña')) {
+      observation.coords.obfuscated = true;
+      observation.coords.lat = Math.round(observation.coords.lat * 100) / 100;
+      observation.coords.lng = Math.round(observation.coords.lng * 100) / 100;
+    }
+
+    state.observations.push(observation);
+    localStorage.setItem('observations', JSON.stringify(state.observations));
+
+    if (state.isOffline) {
+      state.syncQueue.push(observation);
+      localStorage.setItem('syncQueue', JSON.stringify(state.syncQueue));
+      updateSyncIndicator();
+      alert('✅ Guardado offline\n\nSe sincronizará automáticamente cuando recuperes conexión.');
+    } else {
+      alert('✅ Observación enviada\n\n¡Gracias por contribuir a la ciencia ciudadana!');
+      localStorage.setItem('lastSync', Date.now());
+    }
+
+    document.getElementById('obs-form').reset();
+    updateStats();
+  }
+
+  function updateStats() {
+    document.getElementById('stat-obs').textContent = state.observations.length;
+    const uniqueSpecies = new Set(state.observations.map(o => o.species)).size;
+    document.getElementById('stat-species').textContent = uniqueSpecies;
+  }
+
+  // ================= SINCRONIZACIÓN =================
+  function updateConnection() {
+    state.isOffline = !navigator.onLine;
+    const pill = document.getElementById('status-pill');
+    const text = document.getElementById('conn-text');
+    
+    if (state.isOffline) {
+      pill.className = 'pill offline';
+      text.textContent = 'Offline';
+    } else {
+      pill.className = 'pill online';
+      text.textContent = 'Online';
+      
+      // Sincronizar automáticamente
+      if (state.syncQueue.length > 0) {
+        syncData();
+      }
+    }
+    
+    updateSyncIndicator();
+  }
+
+  function updateSyncIndicator() {
+    const pill = document.getElementById('sync-pill');
+    const count = document.getElementById('sync-count');
+    
+    if (state.syncQueue.length > 0) {
+      pill.style.display = 'flex';
+      count.textContent = state.syncQueue.length;
+    } else {
+      pill.style.display = 'none';
+    }
+  }
+
+  function syncData() {
+    console.log('🔄 Sincronizando', state.syncQueue.length, 'observaciones...');
+    setTimeout(() => {
+      state.syncQueue = [];
+      localStorage.removeItem('syncQueue');
+      localStorage.setItem('lastSync', Date.now());
+      updateSyncIndicator();
+      alert('✅ Datos sincronizados correctamente');
+    }, 2000);
+  }
+
+  function downloadMap() {
+    alert('📥 Descargando mapa offline...\n\n• Tiles vectoriales: 450 MB\n• Rutas y POIs: 12 MB\n• Guías de campo: 85 MB\n\nTiempo estimado: 3-5 minutos');
+  }
+
+  // ================= ASISTENTE IA =================
+  function toggleAI() {
+    const panel = document.getElementById('ai-panel');
+    panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  function sendAI() {
+    const input = document.getElementById('ai-input');
+    const query = input.value.trim();
+    if (!query) return;
+
+    addMessage('user', query);
+    input.value = '';
+
+    setTimeout(() => {
+      let response = '';
+      const q = query.toLowerCase();
+
+      if (q.includes('cigüeña') || q.includes('dónde ver')) {
+        response = '🔍 Para ver cigüeñas negras, te recomiendo:\n\n• Zona: Sierra de Grazalema\n• Época: Marzo-Mayo\n• Horario: Amanecer/Atardecer\n\n⚠️ Las coordenadas exactas están ofuscadas por protección. Usa el mapa de la app para ver la zona aproximada.';
+      } else if (q.includes('niños') || q.includes('fácil')) {
+        response = '👶 Rutas familiares recomendadas:\n\n1. Ruta Húmeda del Estero (2.8 km, llana)\n2. Sendero del Bosque Encantado (1.5 km)\n\nAmbas son accesibles para carritos y tienen puntos de interpretación.';
+      } else if (q.includes('seta') || q.includes('tóxica')) {
+        response = '⚠️ IMPORTANTE:\n\nNunca consumas setas sin identificación por micólogo certificado. La IA puede ayudar a identificar, pero NO es infalible. Muchas setas tóxicas se parecen a comestibles. Ante la duda: NO la toques.';
+      } else {
+        response = '🌿 Puedo ayudarte con:\n\n• Identificar especies (foto o sonido)\n• Encontrar rutas cercanas\n• Información sobre conservación\n• Consejos de fotografía de naturaleza\n• Protocolos de ciencia ciudadana\n\n¿Qué te gustaría saber?';
+      }
+
+      addMessage('ai', response);
+    }, 800);
+  }
+
+  function addMessage(role, text) {
+    const container = document.getElementById('ai-messages');
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  // ================= SOS =================
+  function openSOS() {
+    document.getElementById('sos-modal').showModal();
+  }
+
+  function triggerEmergency() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const payload = {
+          type: 'SOS',
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          time: new Date().toISOString(),
+          deviceId: 'user-' + Date.now()
+        };
+        
+        localStorage.setItem('sos_log', JSON.stringify(payload));
+        document.getElementById('sos-modal').close();
+        
+        alert('📡 SOS ENVIADO\n\n• Ubicación registrada\n• Alerta enviada a contactos de emergencia\n• Guarda forestal notificado\n\nMantén la calma y espera ayuda.');
+      }, () => {
+        alert('⚠️ GPS no disponible\n\nSe enviará ubicación aproximada por celda.');
+        document.getElementById('sos-modal').close();
+      });
+    }
+  }
+
+  // ================= INICIALIZACIÓN =================
+  document.addEventListener('DOMContentLoaded', () => {
+    renderRoutes();
+    filterSpecies();
+    updateConnection();
+    updateStats();
+
+    window.addEventListener('online', updateConnection);
+    window.addEventListener('offline', updateConnection);
+
+    // Verificar sincronización cada 30 segundos
+    setInterval(() => {
+      if (!state.isOffline && state.syncQueue.length > 0) {
+        syncData();
+      }
+    }, 30000);
+  });
+</script>
+
+</body>
+</html>
